@@ -1,68 +1,70 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auto Refresh Hit Counter</title>
+    <title>Auto Refresh Page</title>
     <style>
         body {
-            background-color: darkblue;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
+            background-color: #00008B; /* Dark Blue Background */
+            color: yellow; /* Bright Yellow Text */
+            text-align: center;
             font-family: Arial, sans-serif;
+            padding-top: 50px;
+            border: 10px solid #FFFF00; /* Thick Fluorescent Yellow Border */
+            margin: 20px;
         }
-        #counter {
+        h1 {
             font-size: 2em;
-            color: yellow; /* Bright yellow for the counter */
-            border: 5px solid fluorescentyellow; /* Thick fluorescent yellow border */
-            padding: 10px;
-            border-radius: 10px;
-            background-color: rgba(0, 0, 0, 0.5);
         }
         button {
-            margin: 10px;
-            padding: 10px 20px;
             font-size: 1.5em;
-            color: black;
-            background-color: yellow;
-            border: none;
+            padding: 10px 20px;
+            margin: 20px;
             cursor: pointer;
-            border-radius: 5px;
+            border: none;
+            border-radius: 10px;
         }
-        button:hover {
-            background-color: lightyellow;
+        #startBtn {
+            background-color: green;
+            color: white;
+        }
+        #stopBtn {
+            background-color: red;
+            color: white;
+        }
+        #counter {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: yellow;
         }
     </style>
 </head>
 <body>
+    <h1>Auto Refresh Hit Counter</h1>
+    <p>Hits: <span id="counter">454344</span></p>
+    <button id="startBtn">Start</button>
+    <button id="stopBtn">Stop</button><script>
+    let count = parseInt(localStorage.getItem('hitCount')) || 454344;
+    let interval;
 
-    <div id="counter">454344</div>
-    <button id="startButton">Start</button>
-    <button id="stopButton">Stop</button>
+    document.getElementById("counter").textContent = count;
 
-    <script>
-        let hits = 454344;
-        let interval;
+    document.getElementById("startBtn").addEventListener("click", function() {
+        if (!interval) { // Prevent multiple intervals
+            interval = setInterval(function() {
+                count++;
+                localStorage.setItem('hitCount', count);
+                document.getElementById("counter").textContent = count;
+                location.reload(); // Refresh page every 5 seconds
+            }, 5000);
+        }
+    });
 
-        document.getElementById('startButton').onclick = function() {
-            if (!interval) {
-                interval = setInterval(function() {
-                    hits++;
-                    document.getElementById('counter').innerText = hits;
-                    window.location.reload(); // Refresh the page
-                }, 5000); // Refreshes every 5 seconds
-            }
-        };
-
-        document.getElementById('stopButton').onclick = function() {
-            clearInterval(interval);
-            interval = null;
-        };
-    </script>
+    document.getElementById("stopBtn").addEventListener("click", function() {
+        clearInterval(interval);
+        interval = null;
+    });
+</script>
 
 </body>
 </html>
