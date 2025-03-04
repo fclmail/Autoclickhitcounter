@@ -47,23 +47,34 @@
     let count = parseInt(localStorage.getItem('hitCount')) || 454344;
     let interval;
 
+    // Increment counter every time the page loads
+    count++;
+    localStorage.setItem('hitCount', count);
     document.getElementById("counter").textContent = count;
 
+    // Check if auto-refresh was already running
+    if (localStorage.getItem('autoRefresh') === 'true') {
+        startAutoRefresh();
+    }
+
     document.getElementById("startBtn").addEventListener("click", function() {
-        if (!interval) { // Prevent multiple intervals
-            interval = setInterval(function() {
-                count++;
-                localStorage.setItem('hitCount', count);
-                document.getElementById("counter").textContent = count;
-                location.reload(); // Refresh page every 5 seconds
-            }, 5000);
-        }
+        localStorage.setItem('autoRefresh', 'true');
+        startAutoRefresh();
     });
 
     document.getElementById("stopBtn").addEventListener("click", function() {
+        localStorage.setItem('autoRefresh', 'false');
         clearInterval(interval);
         interval = null;
     });
+
+    function startAutoRefresh() {
+        if (!interval) {
+            interval = setInterval(function() {
+                location.reload(); // Refresh page every 5 seconds
+            }, 5000);
+        }
+    }
 </script>
 
 </body>
